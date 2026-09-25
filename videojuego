@@ -1,0 +1,165 @@
+# VARIABLE GLOBAL
+nombre_heroe = "Juddzann"
+
+
+# CLASE PADRE
+class Nivel1:
+
+    def __init__(self):
+        self.vidas = 2
+        self.xp = 0
+        self.monedas = 0
+        self.nivel = 1
+
+        # LISTAS
+        self.inventario = ["Espada", "Poción", "Escudo"]
+        self.enemigos = ["Goblin", "Lobo", "Orco"]
+
+        # TUPLA
+        self.info_heroe = ("Juddzann", "Guerrero", "Humano")
+
+    def completar_nivel(self, numero):
+        print(f"\n⭐ NIVEL {numero} COMPLETADO")
+        self.ganar_experiencia(100)
+
+    def perder_vida(self):
+        self.vidas -= 1
+
+        print("\n❌ Perdiste una vida")
+        print("❤️ Vidas restantes:", self.vidas)
+
+        if self.vidas > 0:
+            print("✅ Aún te quedan vidas")
+            return True
+
+        print("\n💀 GAME OVER")
+        print("Sin vidas disponibles")
+        self.regresar_menu()
+        return False
+
+    def regresar_menu(self):
+        print("🔙 Regresando al menú principal...")
+
+    def mostrar_estadisticas(self):
+        print("\n===== ESTADÍSTICAS =====")
+        print("Héroe:", nombre_heroe)
+        print("Nivel:", self.nivel)
+        print("XP:", self.xp)
+        print("Monedas:", self.monedas)
+        print("Vidas:", self.vidas)
+        print("Inventario:", self.inventario)
+
+    def ganar_experiencia(self, cantidad):
+        self.xp += cantidad
+        print(f"+{cantidad} XP obtenida")
+
+        if self.xp >= 300:
+            self.nivel = 3
+        elif self.xp >= 100:
+            self.nivel = 2
+
+    def atacar_enemigo(self):
+        print("⚔️ Has atacado al enemigo")
+        self.monedas += 20
+        print("+20 monedas")
+
+
+# CLASES HIJAS
+class Nivel2(Nivel1):
+    pass
+
+
+class Nivel3(Nivel2):
+    pass
+
+
+class Nivel4(Nivel3):
+    pass
+
+
+# JUEGO
+class Juego(Nivel4):
+
+    def instrucciones(self):
+        print("\n===== INSTRUCCIONES =====")
+        print("Tienes 2 vidas.")
+        print("Debes completar los 4 niveles en orden.")
+        print("Si fallas pierdes una vida.")
+        print("Si las vidas llegan a 0 vuelves al menú.")
+        print("=========================")
+
+    def jugar(self):
+
+        self.vidas = 2
+
+        for nivel in range(1, 5):
+
+            while True:
+
+                print(f"\n===== NIVEL {nivel} =====")
+                print("Objetivo: Completar")
+
+                respuesta = input(
+                    "¿Completaste el nivel? (s/n): ").lower()
+
+                if respuesta == "s":
+
+                    self.atacar_enemigo()
+                    self.completar_nivel(nivel)
+
+                    if nivel < 4:
+                        print(f"➡️ Pasas al NIVEL {nivel + 1}")
+
+                    break
+
+                elif respuesta == "n":
+
+                    if not self.perder_vida():
+                        return
+
+                else:
+                    print("Ingrese s o n")
+
+        print("\n🏆 ¡VICTORIA!")
+        print("Has completado todos los niveles")
+        print("❤️ Vidas restantes:", self.vidas)
+
+    def menu(self):
+
+        while True:
+
+            print("\n============================")
+            print("      EL HÉROE DEL SUNN")
+            print("============================")
+            print("1. Jugar")
+            print("2. Instrucciones")
+            print("3. Estadísticas")
+            print("4. Salir")
+
+            try:
+
+                opcion = int(input("Seleccione una opción: "))
+
+                if opcion == 1:
+                    self.jugar()
+
+                elif opcion == 2:
+                    self.instrucciones()
+
+                elif opcion == 3:
+                    self.mostrar_estadisticas()
+
+                elif opcion == 4:
+                    print("Gracias por jugar")
+                    break
+
+                else:
+                    print("Opción inválida")
+
+            except ValueError:
+                print("Error: Debe ingresar un número")
+
+
+# PROGRAMA PRINCIPAL
+juego = Juego()
+juego.menu()
